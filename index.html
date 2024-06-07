@@ -29,6 +29,25 @@
             color: blue;
             text-decoration: underline;
         }
+        #loading {
+            display: none; /* Initially hidden */
+            margin-top: 20px;
+            font-size: 18px;
+            color: #555;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #000;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-top: 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -47,6 +66,12 @@
 <div id="image-container"></div>
 <p id="save-instructions" style="display: none;">To save the image, capture the screen yourself.</p>
 
+<div id="loading">
+    <div class="spinner"></div>
+    <p>Loading... Please wait.</p>
+    <p>Note: if the image displays too slowly, try exiting and re-entering or change the prompt.</p>
+</div>
+
 <script>
     function setPrompt(prompt) {
         document.getElementById('prompt').value = prompt;
@@ -55,6 +80,10 @@
     async function generateImage() {
         const prompt = document.getElementById('prompt').value;
         const apiKey = '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'; // Replace with your actual API key
+
+        // Show the loading spinner
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('image-container').innerHTML = '';
 
         const options = {
             method: 'POST',
@@ -89,6 +118,9 @@
         } catch (error) {
             console.error('Error generating image:', error);
             alert('Failed to generate image. Please try again.');
+        } finally {
+            // Hide the loading spinner
+            document.getElementById('loading').style.display = 'none';
         }
     }
 </script>
